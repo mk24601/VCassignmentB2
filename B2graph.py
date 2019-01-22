@@ -11,7 +11,7 @@ import numpy as np
 
 LOOP = 7
 NODENUM = 5
-colorlist = ["r", "g", "b", "c", "m", "y", "k", "pink"]
+colorlist = ["r", "g", "b", "c", "m", "y", "k", "pink"] #色
 
 def func(vertex):
     v_list = []
@@ -40,12 +40,11 @@ def graphme(v_list):
 
 
 def main():
-    V = [(0,0),(1,1),(4,-1),(5,0)]
+    V = []
+    #V = [(0,0),(1,1),(4,-1),(5,0)]
 
-    #for i in range(NODENUM):
-    #    V.append((random.random()*20, random.random()*20))
-
-
+    for i in range(NODENUM):
+        V.append((random.random()*20, random.random()*20))
 
     Gs = []
     g0, p0 = graphme(V)
@@ -57,7 +56,7 @@ def main():
         Gs.append((g,p))
         V = p
 
-    for i in [0,7]:
+    for i in range(len(Gs)):
         nx.draw(Gs[i][0],Gs[i][1], node_color=colorlist[i], node_size=10)
 
     # 保存
