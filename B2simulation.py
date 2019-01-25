@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-
 import networkx as nx
 from networkx.readwrite import json_graph
 import json
-import pylab
 import matplotlib.pyplot as plt
 import random
-import scipy.misc as scm
-import numpy as np
+
 
 LOOP = 7
 NODENUM = 5
