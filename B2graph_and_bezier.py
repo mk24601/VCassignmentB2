@@ -7,11 +7,10 @@ import matplotlib.pyplot as plt
 import random
 
 LOOP = 7
-NODENUM = 5
+NODENUM = 4
 colorlist = ["r", "g", "b", "c", "m", "y", "k", "pink"] #色
 
-# 課題の条件で多角形を細分する関数
-def divit(vertex):
+def func(vertex):
     v_list = []
 
     for i in range(len(vertex) - 1):
@@ -23,7 +22,6 @@ def divit(vertex):
 
     return v_list
 
-# 与えられたノードを先頭から順にエッジを繋いでいく関数
 def graphme(v_list):
     G = nx.Graph()
     pos={}
@@ -37,7 +35,6 @@ def graphme(v_list):
 
     return G, pos
 
-# ベジエ曲線の通る座標を算出する関数
 def bezier_point(t, v_list):
     ver = v_list
     
@@ -53,7 +50,6 @@ def bezier_point(t, v_list):
         
     return x, y
 
-# 与えられた座標のリストを制御点としたベジェ曲線を生成する関数
 def bezierme(V):
     x_bezier=[]
     y_bezier=[]
@@ -64,38 +60,46 @@ def bezierme(V):
         y_bezier.append(y)
     return x_bezier, y_bezier
 
+
 def main():
     V = []
+    V = [(0,0),(1,1),(4,-1),(5,0)]
 
-    # NODENUM個の制御点をランダムに生成(0<x<20, 0<y<20)
     #for i in range(NODENUM):
     #    V.append((random.random()*20, random.random()*20))
+    #bezier_x, bezier_y = bezierme(V)
 
-    V = [(0,0),(1,1),(4,-1),(5,0)]
-    
-    # b-spline曲線を描画
-    for i in range(len(V)-2):      
-        bezier_x, bezier_y = bezierme([((V[i][0]+V[i+1][0])*(1/2),(V[i][1]+V[i+1][1])*(1/2)),(V[i+1][0],V[i+1][1]),((V[i+1][0]+V[i+2][0])*(1/2),(V[i+1][1]+V[i+2][1])*(1/2))])
-        plt.plot(bezier_x, bezier_y)
-    
-    # 以下、課題の多角形を生成
+    Vhalf = []
+    for i in range(len(V)):
+        if i == 0:
+            Vhalf.append(((V[0][0]+V[1][0])*(1/2),(V[0][1]+V[1][1])*(1/2)))
+        elif i == NODENUM - 1:
+            Vhalf.append(((V[NODENUM - 2][0]+V[NODENUM - 1][0])*(1/2),(V[NODENUM - 2][1]+V[NODENUM - 1][1])*(1/2)))     
+        else:
+            Vhalf.append(V[i])
+
+    bezier_x, bezier_y = bezierme(Vhalf)
+
     Gs = []
     g0, p0 = graphme(V)
     Gs.append((g0,p0))
 
     for t in range(LOOP):
-        v = divit(V)
+        v = func(V)
         g, p  = graphme(v)
         Gs.append((g,p))
         V = p
 
+    #for i in range(len(Gs)):
     for i in [0,len(Gs)-1]:
-        nx.draw(Gs[i][0],Gs[i][1], node_color=colorlist[i%len(colorlist)], node_size=10)
+        nx.draw(Gs[i][0],Gs[i][1], node_color=colorlist[i], node_size=10)
 
-    # 図の保存
+    plt.plot(bezier_x, bezier_y)
+
+    # 保存
     plt.savefig("test_fig.png")
 
-    # 図の表示
+    # 表示
     plt.show()
 
 if __name__ == "__main__":
